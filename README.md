@@ -14,9 +14,9 @@
 
 ## Live Links for Portfolio & Resume
 
-* **Frontend Application (Vercel):** [https://taskflow-ai.vercel.app](https://taskflow-ai.vercel.app) *(Replace with your Vercel deployment URL)*
-* **Backend API & Health Probe (AWS EC2):** [http://your-ec2-domain.com:5000/api/health](http://your-ec2-domain.com:5000/api/health)
-* **GitHub Repository:** [https://github.com/adarshtiwaridev/taskflow-ai](https://github.com/adarshtiwaridev/taskflow-ai)
+* **Frontend Application (Vercel):** [https://taskflow-ai-murex.vercel.app](https://taskflow-ai-murex.vercel.app)
+* **Backend API & Health Probe (Render / EC2):** [https://taskflow-api.onrender.com/api/health](https://taskflow-api.onrender.com/api/health)
+* **GitHub Repository:** [https://github.com/adarshtiwaridev/Taskflow-Ai](https://github.com/adarshtiwaridev/Taskflow-Ai)
 
 ---
 

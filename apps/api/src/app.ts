@@ -7,6 +7,24 @@ import { errorHandler } from "./middleware/errorHandler";
 import { notFoundHandler } from "./middleware/notFound";
 import { requestLogger } from "./middleware/requestLogger";
 
+const normalizeOrigin = (url: string) => url.trim().replace(/\/+$/, "");
+
+const rawOrigins = [
+  env.WEB_URL,
+  "https://taskflow-ai-murex.vercel.app",
+  ...(env.CORS_ORIGIN ? env.CORS_ORIGIN.split(",") : []),
+];
+
+const allowedOrigins = Array.from(new Set(rawOrigins.filter(Boolean).map(normalizeOrigin)));
+
+export const isOriginAllowed = (origin?: string): boolean => {
+  if (!origin || !env.IS_PROD) return true;
+  const normalized = normalizeOrigin(origin);
+  if (allowedOrigins.includes(normalized) || allowedOrigins.includes("*")) return true;
+  if (normalized.endsWith(".vercel.app")) return true;
+  return false;
+};
+
 export const createApp = (): Express => {
   const app = express();
 
@@ -19,17 +37,10 @@ export const createApp = (): Express => {
   );
 
   // CORS configuration
-  const allowedOrigins = [env.WEB_URL];
-  if (env.CORS_ORIGIN) {
-    allowedOrigins.push(...env.CORS_ORIGIN.split(",").map((o) => o.trim()));
-  }
-
   app.use(
     cors({
       origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps, curl, Supertest)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin) || allowedOrigins.includes("*") || !env.IS_PROD) {
+        if (isOriginAllowed(origin)) {
           return callback(null, true);
         }
         return callback(new Error(`CORS blocked request from origin: ${origin}`));
@@ -56,4 +67,3 @@ export const createApp = (): Express => {
 };
 
 export const app = createApp();
-

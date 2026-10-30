@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { Server } from "socket.io";
-import { app } from "./app";
+import { app, isOriginAllowed } from "./app";
 import { env } from "./config/env";
 import { logger } from "./utils/logger";
 import { setupRedisAdapter } from "./sockets/redisAdapter";
@@ -10,15 +10,10 @@ import { ServerToClientEvents, ClientToServerEvents } from "@taskflow/shared";
 
 const server = createServer(app);
 
-const allowedOrigins = [env.WEB_URL];
-if (env.CORS_ORIGIN) {
-  allowedOrigins.push(...env.CORS_ORIGIN.split(",").map((o) => o.trim()));
-}
-
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: {
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes("*") || !env.IS_PROD) {
+      if (isOriginAllowed(origin)) {
         return callback(null, true);
       }
       return callback(new Error(`CORS blocked Socket.io from origin: ${origin}`));
@@ -39,7 +34,7 @@ async function startServer(): Promise<void> {
   initSocketHandler(io);
 
   server.listen(env.PORT, () => {
-    logger.info(`TaskFlow AI API running on http://localhost:${env.PORT}`);
+    logger.info(`TaskFlow AI API running on port ${env.PORT}`);
     logger.info(`Environment: ${env.NODE_ENV} | Web Client: ${env.WEB_URL}`);
   });
 }
