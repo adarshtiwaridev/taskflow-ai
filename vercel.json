@@ -1,9 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
-  "installCommand": "npm install",
-  "buildCommand": "npm run build --workspace=@taskflow/shared && npm run build --workspace=@taskflow/web",
-  "outputDirectory": "apps/web/dist",
+  "buildCommand": "npm run build:vercel",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -11,4 +10,3 @@
     }
   ]
 }
-
