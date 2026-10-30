@@ -72,7 +72,7 @@ export class TaskRepository {
       const tasks = await prisma.task.findMany({
         orderBy: { createdAt: "desc" },
       });
-      return tasks.map((t) => this.formatTask(t));
+      return tasks.map((t: any) => this.formatTask(t));
     } catch (error) {
       this.useMemoryFallback = true;
       logger.warn("PostgreSQL unavailable, utilizing in-memory task store fallback:", (error as Error).message);

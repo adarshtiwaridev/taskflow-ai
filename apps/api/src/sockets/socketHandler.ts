@@ -25,7 +25,7 @@ export const initSocketHandler = (io: Server<ClientToServerEvents, ServerToClien
 
     socket.to(currentRoom).emit("user:joined", { userId: socket.id, activeUsers: count });
 
-    socket.on("board:join", async ({ boardId }) => {
+    socket.on("board:join", async ({ boardId }: { boardId: string }) => {
       socket.leave(currentRoom);
       const prevCount = Math.max((roomUserCounts.get(currentRoom) || 1) - 1, 0);
       roomUserCounts.set(currentRoom, prevCount);
@@ -41,7 +41,7 @@ export const initSocketHandler = (io: Server<ClientToServerEvents, ServerToClien
       socket.to(currentRoom).emit("user:joined", { userId: socket.id, activeUsers: newCount });
     });
 
-    socket.on("board:leave", ({ boardId }) => {
+    socket.on("board:leave", ({ boardId }: { boardId: string }) => {
       const room = `board:${boardId}`;
       socket.leave(room);
       const c = Math.max((roomUserCounts.get(room) || 1) - 1, 0);

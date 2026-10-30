@@ -8,6 +8,7 @@
     "packages/shared"
   ],
   "scripts": {
+    "postinstall": "npm run build --workspace=@taskflow/shared",
     "dev": "concurrently -n web,api \"npm run dev:web\" \"npm run dev:api\"",
     "dev:web": "npm run dev --workspace=@taskflow/web",
     "dev:api": "npm run dev --workspace=@taskflow/api",
