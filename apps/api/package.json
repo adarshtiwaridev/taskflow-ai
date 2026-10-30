@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc -p tsconfig.json",
+    "build:vercel": "node -e \"console.log('Skipping API build on Vercel')\"",
     "start": "node dist/server.js",
     "test": "jest --coverage"
   },
